@@ -1,0 +1,64 @@
+# ========================
+# Python / FastAPI
+# ========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+
+# Virtual Environment
+venv/
+.env/
+.env.*
+
+# Alembic
+alembic/versions/*.pyc
+
+# Logs
+*.log
+
+# ========================
+# Node / React / Vite
+# ========================
+node_modules/
+dist/
+build/
+
+# Vite
+.vite/
+
+# ========================
+# Environment files
+# ========================
+.env
+
+# ========================
+# IDE / Editor
+# ========================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ========================
+# OS files
+# ========================
+.DS_Store
+Thumbs.db
+
+# ========
+# Uploads 
+# ========
+backend/uploads/
+
+# ========================
+# Misc
+# ========================
+*.exe
+*.dll
+*.zip
+*.tar
+*.gz
+package-lock.json
+
