@@ -13,7 +13,7 @@ def verify_password(plain_password: str, hashed_password: str):
 
 def create_access_token(subject: str):
     expire=datetime.now(timezone.utc) + timedelta(minutes=settings.access_token_expire_minutes)
-    payload = {"sub": subject, "exp": expire}
+    payload = {"sub": subject, "type": "access", "exp": expire}
     return jwt.encode(payload, settings.jwt_secret, algorithm=settings.jwt_algorithm)
 
 def decode_token(token: str):
@@ -21,3 +21,9 @@ def decode_token(token: str):
         return jwt.decode(token, settings.jwt_secret, algorithms=[settings.jwt_algorithm])
     except JWTError:
         return None
+    
+def create_refresh_token(subject: str):
+    expire=datetime.now(timezone.utc) + timedelta(minutes=settings.refresh_token_expire_minutes)
+    payload = {"sub": subject, "type": "refresh", "exp": expire,}
+    return jwt.encode(payload, settings.jwt_secret, algorithm=settings.jwt_algorithm,)
+

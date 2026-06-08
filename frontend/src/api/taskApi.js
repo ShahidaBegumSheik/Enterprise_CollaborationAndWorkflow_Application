@@ -21,7 +21,7 @@ export async function updateTask(taskId, payload) {
 }
 
 export async function updateTaskStatus(taskId, status) {
-    const { data } = await api.put(`/tasks/${taskId}`, { status });
+    const { data } = await api.put(`/tasks/${taskId}/status`, { status });
     return data;
 }
 

@@ -3,27 +3,28 @@ from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.api.deps import get_current_user
-from app.schemas.approval import ApprovalCreate, ApprovalAction
+from app.schemas.approval import ApprovalCreate, ApprovalAction, ApprovalOut
 from app.services.approval_service import (
     create_request_service,
     list_requests_service,
     approval_action_service,
     get_approval_history_service,
 )
+from fastapi_pagination import Page
 
 router = APIRouter(prefix="/approvals", tags=["Approvals"])
 
 
 @router.post("")
-def create_request(
+async def create_request(
     payload: ApprovalCreate,
     db: Session = Depends(get_db),
     user=Depends(get_current_user),
 ):
-    return create_request_service(db, payload, user)
+    return await create_request_service(db, payload, user)
 
 
-@router.get("")
+@router.get("", response_model=Page[ApprovalOut])
 def list_requests(
     db: Session = Depends(get_db),
     user=Depends(get_current_user),

@@ -18,5 +18,7 @@ class AuditLog(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda:datetime.now(timezone.utc))
 
     __table_args__ = (
-        Index("ix_auditlog_id", "id"),
+        Index("ix_auditlog_user_id", "user_id"),
+        Index("ix_auditlog_entity", "entity_type", "entity_id"),
+        Index("ix_auditlog_created_at", "created_at"),
     )

@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     jwt_secret: str = Field(default="change_me", alias="JWT_SECRET_KEY")
     jwt_algorithm: str = Field(default="HS256", alias="JWT_ALGORITHM")
     access_token_expire_minutes: int = Field(default=60, alias="ACCESS_TOKEN_EXPIRE_MINUTES")
+    refresh_token_expire_minutes: int = Field(default=60*24*7, alias="REFRESH_TOKEN_EXPIRE_MINUTES")
 
     cors_origins: str = Field(
         default="http://localhost:5173,http://127.0.0.1:5173",
@@ -32,6 +33,26 @@ class Settings(BaseSettings):
 
     rate_limit_login: str = Field(default="5/minute", alias="RATE_LIMIT_LOGIN")
     rate_limit_ticket_create: str = Field(default="10/hour", alias="RATE_LIMIT_TICKET_CREATE")
+
+    razorpay_key_id: str = Field(default="", alias="RAZORPAY_KEY_ID")
+    razorpay_key_secret: str = Field(default="", alias="RAZORPAY_KEY_SECRET")
+    razorpay_webhook_secret: str = Field(default="", alias="RAZORPAY_WEBHOOK_SECRET")
+    razorpay_pro_amount: int = Field(default=499, alias="RAZORPAY_PRO_AMOUNT")
+    razorpay_currency: str = Field(default="INR", alias="RAZORPAY_CURRENCY")
+    razorpay_company_name: str = Field(
+        default="VertexCore", alias="RAZORPAY_COMPANY_NAME"
+    )
+    razorpay_company_description: str = Field(
+        default="Enterprise Software", alias="RAZORPAY_COMPANY_DESCRIPTION"
+    )
+
+    redis_url: str = Field(default="redis://localhost:6379/0", alias="REDIS_URL")
+
+    cache_ttl_seconds: int = Field(default=60, alias="CACHE_TTL_SECONDS")
+
+    google_client_id: str | None = None
+    google_client_secret: str | None = None
+    google_redirect_uri: str | None = None
 
     @property
     def cors_origins_list(self) -> list[str]:

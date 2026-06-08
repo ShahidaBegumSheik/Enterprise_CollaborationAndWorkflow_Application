@@ -747,4 +747,161 @@ Expected result:
 7. Manager approves or transfers to admin.
 8. Admin finalizes transferred request.
 9. Upload and download document.
-10. Show dashboard and audit logs.
+10. Dashboard and audit logs available.
+
+---
+
+# Task 2 – Enterprise & SaaS Enhancements
+
+## 11. Task 2 Features Added
+
+### Advanced Authentication
+- JWT Refresh Token Support
+- Password Reset Flow (Token-Based)
+- Google OAuth Login
+- Secure Password Hashing
+- Token Validation and Expiration Handling
+
+### Security Enhancements
+- Role-Based Permission Middleware
+- Organization-Level Data Isolation
+- API Rate Limiting
+- Input Validation and Sanitization
+- Protected Routes
+
+### Performance Optimizations
+- API Pagination
+- Database Query Optimization
+- SQLAlchemy Relationship Loading Optimization
+- Redis-Based Caching (Optional Configuration)
+
+### Real-Time & Activity Tracking
+- Task Notifications
+- Approval Notifications
+- Document Notifications
+- Notification Bell with Unread Count
+- Audit Logging for User Activities
+
+### Enterprise Dashboards
+
+#### Employee Dashboard
+- Assigned Tasks
+- Approval Requests
+- Personal Activity Summary
+
+#### Manager Dashboard
+- Team Tasks
+- Team Approvals
+- Pending Reviews
+
+#### Admin Dashboard
+- Organization Statistics
+- User Analytics
+- Approval Analytics
+- System Activity Summary
+
+### AI-Based Insights
+- High Priority Task Detection
+- Delay Risk Identification
+- Rule-Based AI Summary
+- Workload Visibility
+
+### Smart Task Assignment
+- Assignment Suggestions Based on User Workload
+- Historical Task Completion Analysis
+
+### SaaS Multi-Tenant Features
+- Multiple Organizations
+- Organization Data Isolation
+- Organization-Specific Users
+- Organization-Specific Tasks
+- Organization-Specific Documents
+- Organization-Specific Approvals
+- Organization-Specific Notifications
+
+### Subscription & Billing
+- Basic Plan
+- Silver Plan
+- Gold Plan
+- Credit-Based Usage
+- Razorpay Integration
+- AI Credit Tracking
+- Storage Limits
+- User Limits
+
+---
+
+# Task 2 API Endpoints
+
+## Authentication APIs
+
+| Method | Endpoint | Purpose |
+|----------|----------|----------|
+| POST | /auth/refresh | Generate new access token using refresh token |
+| POST | /auth/forgot-password | Generate password reset token |
+| POST | /auth/reset-password | Reset password using token |
+| GET | /auth/google/login | Initiate Google OAuth login |
+| GET | /auth/google/callback | Google OAuth callback |
+
+## Notification APIs
+
+| Method | Endpoint | Purpose |
+|----------|----------|----------|
+| GET | /notifications | List notifications for current user |
+| GET | /notifications/unread-count | Get unread notification count |
+| PUT | /notifications/{id}/read | Mark notification as read |
+| PUT | /notifications/read-all | Mark all notifications as read |
+
+## Dashboard Analytics APIs
+
+| Method | Endpoint | Purpose |
+|----------|----------|----------|
+| GET | /dashboard/summary | Dashboard summary |
+| GET | /dashboard/ai-summary | AI-generated task insights |
+| GET | /dashboard/workload | Workload analysis |
+| GET | /dashboard/analytics | Organization analytics |
+
+---
+
+# Multi-Tenant Architecture
+
+Organization 1
+- Admin
+- Manager
+- Employees
+- Tasks
+- Approvals
+- Documents
+- Notifications
+
+Organization ABC
+- Admin
+- Manager
+- Employees
+- Tasks
+- Approvals
+- Documents
+- Notifications
+
+---
+
+# Notification Workflow
+
+Task Assigned → Notification Created → Unread Count Increases → Bell Badge Updated → User Opens Notification → Mark as Read → Unread Count Decreases
+
+OR
+
+Mark All as Read → Unread Count Becomes Zero
+
+---
+
+# Subscription Plans
+
+| Feature | Basic | Silver | Gold |
+|----------|----------|----------|----------|
+| Users | 10 | 50 | Unlimited |
+| Storage | 1 GB | 10 GB | 100 GB |
+| AI Credits | 100 | 1000 | Unlimited |
+| Organizations | 1 | 5 | Unlimited |
+| Priority Support | No | Yes | Yes |
+

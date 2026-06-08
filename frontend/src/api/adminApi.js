@@ -24,3 +24,9 @@ export async function getAuditLogs(params = {}) {
   const { data } = await api.get("/audit-logs", { params });
   return data;
 }
+
+export async function getValidAssignees() {
+ const { data } = await api.get("/users/valid-assignees");
+ return data;
+}
+

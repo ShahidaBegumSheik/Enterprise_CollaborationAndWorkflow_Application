@@ -11,12 +11,12 @@ export async function createDepartment(payload) {
 }
 
 export async function updateDepartment(departmentId, payload) {
-    const { data } = await api.put(`/department/${departmentId}`, payload);
+    const { data } = await api.put(`/departments/${departmentId}`, payload);
     return data;
 }
 
 export async function deleteDepartment(departmentId) {
-    const { data } = await api.delete(`/department/${departmentId}`);
+    const { data } = await api.delete(`/departments/${departmentId}`);
     return data;
 }
 

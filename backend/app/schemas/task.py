@@ -30,9 +30,8 @@ class TaskOut(BaseModel):
     due_date: datetime | None
     created_by: int
     assignee_id: int | None
-    workspace_id: int | None
-
-    creator_name: str | None = None
-    assignee_name: str | None = None
+    organization_id: int | None
+    created_at: datetime | None
+    updated_at: datetime | None
 
     model_config = ConfigDict(from_attributes=True)

@@ -15,3 +15,6 @@ def create_audit_log(db, user_id, action, entity, entity_id, message):
 
 def list_audit_logs_service(db):
     return repo.list_logs(db)
+
+def list_entity_history_service(db, entity_type: str, entity_id: int):
+    return repo.list_logs_by_entity(db, entity_type, entity_id)

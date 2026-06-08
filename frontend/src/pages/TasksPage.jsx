@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import AppLayout from "../components/layout/AppLayout";
 import { createTask, deleteTask, getTasks, updateTask } from "../api/taskApi";
-import { getAllUsers } from "../api/adminApi"
+import { getAllUsers, getValidAssignees } from "../api/adminApi"
 
 const emptyForm = {
   title: "",
@@ -26,8 +25,17 @@ export default function TasksPage() {
   const [form, setForm] = useState(emptyForm);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [size] = useState(10);
 
   const currentUser = JSON.parse(localStorage.getItem("enterprise_user") || "{}");
+
+  const taskPageTitle = 
+    currentUser?.role === "admin"
+    ? "Create, assign, and monitor organization tasks"
+    : currentUser?.role === "manager"
+    ? "Assign, track, and review team tasks"
+    : "View, update, and complete assigned tasks";
 
   const assignableUsers = users.filter((user) => {
     const currentRole = String(currentUser.role || "").toLowerCase();
@@ -43,7 +51,7 @@ export default function TasksPage() {
 
     if (currentRole === "employee") {
       return (
-        user.role === "employee" && 
+        currentUser.role === "employee" && 
         Number(user.id) !== Number(currentUser.id)
       );
     }
@@ -58,8 +66,8 @@ export default function TasksPage() {
 
   async function loadTasks() {
     try {
-      const data = await getTasks();
-      setTasks(data);
+      const data = await getTasks({page, size});
+      setTasks(data.items || []);
     } catch (err) {
       console.error(err);
       setError("Unable to load tasks");
@@ -68,9 +76,12 @@ export default function TasksPage() {
 
   async function loadUsers() {
     try {
-      const data = await getAllUsers();
-      //setUsers(data.filter((user) => user.role === "employee"));
-      setUsers(data);
+      if (currentUser?.role === "employee") {
+        setUsers([]);
+        return;
+      }
+      const users = await getValidAssignees();
+      setUsers(users);
     } catch (err) {
       console.error(err);
       setError("Unable to load users for assignee dropdown");
@@ -114,16 +125,15 @@ export default function TasksPage() {
   }
 
   return (
-    <AppLayout>
-      <div className="space-y-6">
-        <div className="rounded-4xl bg-linear-to-r from-slate-950 to-indigo-900 p-8 text-white shadow-2xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-indigo-200">Task Management</p>
-          <h2 className="mt-3 text-3xl font-black">Create, assign, track and complete tasks</h2>
-        </div>
+    <div className="space-y-6">
+      <div className="rounded-2xl bg-gradient-to-r from-slate-950 to-indigo-900 p-5 text-white shadow-2xl">
+        <p className="text-sm font-semibold uppercase tracking-[0.25em] text-indigo-200">Task Management</p>
+        <h2 className="mt-3 text-3xl font-black">{taskPageTitle}</h2>
+      </div>
 
-        {error && <div className="rounded-2xl bg-rose-50 p-4 font-semibold text-rose-700">{error}</div>}
-
-        <form onSubmit={handleSubmit} className="rounded-3xl bg-white p-6 shadow-xl">
+      {error && <div className="rounded-2xl bg-rose-50 p-4 font-semibold text-rose-700">{error}</div>}
+      {currentUser?.role !== "employee" && (
+        <form onSubmit={handleSubmit} className="rounded-2xl bg-white p-6 shadow-xl">
           <h3 className="mb-5 text-xl font-black text-slate-900">Create Task</h3>
           <div className="grid gap-4 md:grid-cols-2">
             <input className="rounded-2xl border border-slate-200 bg-slate-50 p-3 outline-none ring-indigo-500 focus:ring-2" placeholder="Task title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
@@ -155,29 +165,29 @@ export default function TasksPage() {
             {loading ? "Creating..." : "Create Task"}
           </button>
         </form>
+      )}
 
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {tasks.map((task) => (
-            <div key={task.id} className="rounded-3xl bg-white p-5 shadow-xl transition hover:-translate-y-1 hover:shadow-2xl">
-              <div className="flex items-start justify-between gap-4">
-                <h3 className="text-lg font-black text-slate-900">{task.title}</h3>
-                <span className={`rounded-full px-3 py-1 text-xs font-black uppercase ${priorityBadge(task.priority)}`}>{task.priority}</span>
-              </div>
-              <p className="mt-3 min-h-12 text-sm leading-6 text-slate-500">{task.description || "No description"}</p>
-              <div className="mt-4 grid grid-cols-2 gap-3 text-xs font-bold text-slate-500">
-                <div className="rounded-2xl bg-slate-50 p-3">Status<br /><span className="text-slate-900">{task.status}</span></div>
-                <div className="rounded-2xl bg-slate-50 p-3">Assignee<br /><span className="text-slate-900">{task.assignee_name || "Unassigned"}</span></div>
-              </div>
-              <div className="mt-4 flex gap-2">
-                <select value={task.status} onChange={(e) => handleStatusChange(task.id, e.target.value)} className="flex-1 rounded-2xl border border-slate-200 p-2 text-sm font-bold">
-                  {statusOptions.map((status) => <option key={status} value={status}>{status}</option>)}
-                </select>
-                <button onClick={() => handleDelete(task.id)} className="rounded-2xl bg-rose-50 px-4 py-2 text-sm font-black text-rose-700 hover:bg-rose-100">Delete</button>
-              </div>
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {tasks.map((task) => (
+          <div key={task.id} className="rounded-2xl bg-white p-5 shadow-xl transition hover:-translate-y-1 hover:shadow-2xl">
+            <div className="flex items-start justify-between gap-4">
+              <h3 className="text-lg font-black text-slate-900">{task.title}</h3>
+              <span className={`rounded-full px-3 py-1 text-xs font-black uppercase ${priorityBadge(task.priority)}`}>{task.priority}</span>
             </div>
-          ))}
-        </div>
+            <p className="mt-3 min-h-12 text-sm leading-6 text-slate-500">{task.description || "No description"}</p>
+            <div className="mt-4 grid grid-cols-2 gap-3 text-xs font-bold text-slate-500">
+              <div className="rounded-2xl bg-slate-50 p-3">Status<br /><span className="text-slate-900">{task.status}</span></div>
+              <div className="rounded-2xl bg-slate-50 p-3">Assignee<br /><span className="text-slate-900">{task.assignee_id || "Unassigned"}</span></div>
+            </div>
+            <div className="mt-4 flex gap-2">
+              <select value={task.status} onChange={(e) => handleStatusChange(task.id, e.target.value)} className="flex-1 rounded-2xl border border-slate-200 p-2 text-sm font-bold">
+                {statusOptions.map((status) => <option key={status} value={status}>{status}</option>)}
+              </select>
+              <button onClick={() => handleDelete(task.id)} className="rounded-2xl bg-rose-50 px-4 py-2 text-sm font-black text-rose-700 hover:bg-rose-100">Delete</button>
+            </div>
+          </div>
+        ))}
       </div>
-    </AppLayout>
+    </div>
   );
 }

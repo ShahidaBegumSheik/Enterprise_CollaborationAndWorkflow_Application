@@ -18,8 +18,8 @@ class ApprovalOut(BaseModel):
     id: int
     request_type: str
     title: str
-    description: str | None
-    amount: int | None
+    description: str | None = None
+    amount: float | None = None
     status: str
     submitted_by: int
     current_approver_id: int | None

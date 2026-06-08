@@ -19,7 +19,13 @@ export async function loginUser(payload) {
 }
 
 export async function getCurrentUser() {
-    const { data } = await api.get("/auth/me");
+    const token = localStorage.getItem("enterprise_access_token");
+
+    const { data } = await api.get("/auth/me", {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
     return data;
 }
 

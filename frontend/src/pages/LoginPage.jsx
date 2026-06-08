@@ -24,6 +24,11 @@ export default function LoginPage() {
     }
   }
 
+  const handleGoogleLogin = () => {
+    window.location.href = "http://127.0.0.1:8000/api/v1/auth/google/login";
+  };
+
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-indigo-950 via-slate-900 to-sky-900 p-4">
       <div className="grid w-full max-w-5xl overflow-hidden rounded-4xl bg-white shadow-2xl md:grid-cols-2">
@@ -53,6 +58,15 @@ export default function LoginPage() {
           <button disabled={loading} className="mt-6 w-full rounded-2xl bg-indigo-600 py-3 font-black text-white shadow-lg shadow-indigo-600/25 transition hover:bg-indigo-700 disabled:opacity-60">
             {loading ? "Signing in..." : "Sign In"}
           </button>
+
+          <button
+            type="button"
+            onClick={handleGoogleLogin}
+            className="mt-3 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm font-bold text-slate-700 shadow-sm hover:bg-slate-50"
+          >
+            Continue with Google
+          </button>
+
 
           <p className="mt-6 text-center text-sm text-slate-600">
             Don&apos;t have an account? <Link to="/register" className="font-black text-indigo-600 hover:underline">Register</Link>

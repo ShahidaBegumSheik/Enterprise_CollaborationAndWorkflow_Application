@@ -14,6 +14,8 @@ export default function AdminUsersPage() {
   const [showCreate, setShowCreate] = useState(false);
   const [toast, setToast] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [size] = useState(10);
 
   const [newUser, setNewUser] = useState({
     full_name: "",
@@ -24,8 +26,8 @@ export default function AdminUsersPage() {
 
   const loadUsers = useCallback(async () => {
     try {
-      const data = await getAllUsers();
-      setUsers(Array.isArray(data) ? data : []);
+      const data = await getAllUsers({page, size});
+      setUsers(Array.isArray(data.items) ? data.items : []);
     } catch (error) {
       console.error(error);
       showToast("Unable to load users", "error");
@@ -35,8 +37,8 @@ export default function AdminUsersPage() {
   useEffect(() => {
     async function fetchUsers() {
           try {
-            const data = await getAllUsers();
-            setUsers(Array.isArray(data) ? data : []);
+            const data = await getAllUsers({page, size});
+            setUsers(Array.isArray(data.items) ? data.items : []);
           } catch (err) {
             console.error(err);
             showToast("Unable to laod users", "error");
@@ -144,7 +146,7 @@ export default function AdminUsersPage() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-100 via-indigo-50 to-purple-100 p-6">
+    <div className="w-full max-w-full">
       {toast && (
         <div
           className={`fixed right-6 top-6 z-50 rounded-2xl px-5 py-3 font-semibold text-white shadow-xl ${
@@ -184,7 +186,7 @@ export default function AdminUsersPage() {
         <StatCard title="Employees" value={users.filter((u) => u.role === "employee").length} color="from-emerald-500 to-teal-600" />
       </div>
 
-      <div className="mt-6 overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-slate-200">
+      <div className="mt-6 overflow-x-auto rounded-2xl bg-white shadow ring-1 ring-slate-200">
         <table className="w-full text-left text-sm">
           <thead className="bg-slate-900 text-white">
             <tr>
@@ -283,7 +285,7 @@ export default function AdminUsersPage() {
 
 function StatCard({ title, value, color }) {
   return (
-    <div className={`rounded-3xl bg-linear-to-r ${color} p-5 text-white shadow-xl`}>
+    <div className={`rounded-3xl bg-gradient-to-r ${color} p-5 text-white shadow-xl`}>
       <p className="text-sm font-semibold opacity-80">{title}</p>
       <h2 className="mt-2 text-4xl font-black">{value}</h2>
     </div>

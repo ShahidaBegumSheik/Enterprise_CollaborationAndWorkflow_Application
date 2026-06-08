@@ -13,9 +13,10 @@ class ApprovalRequest(Base):
     title: Mapped[str] = mapped_column(String(150), nullable=False)
     description: Mapped[str] = mapped_column(Text, nullable=True)
     amount: Mapped[float] = mapped_column(Float, nullable=True)
-    status: Mapped[str] = mapped_column(String(30), default="pending_manager")
-    submitted_by: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False)
-    current_approver_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=True)
+    status: Mapped[str] = mapped_column(String(30), default="pending_manager", index=True)
+    submitted_by: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    organization_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("organizations.id"), nullable=True, index=True,)
+    current_approver_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=True, index=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=lambda: datetime.now(timezone.utc),

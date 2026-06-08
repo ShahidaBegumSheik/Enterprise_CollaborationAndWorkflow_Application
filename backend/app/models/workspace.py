@@ -12,9 +12,11 @@ class Workspace(Base):
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     description: Mapped[str] = mapped_column(String(255), nullable=True)
     department_id: Mapped[int] = mapped_column(Integer, ForeignKey("departments.id"), nullable=True)
+    organization_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("organizations.id"), nullable=True, index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     department = relationship("Department", back_populates="workspaces")
+    organization = relationship("Organization", back_populates="workspaces")
     tasks = relationship("Task", back_populates="workspace")
 
     __table_args__ = (

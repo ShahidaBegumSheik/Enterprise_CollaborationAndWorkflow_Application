@@ -5,3 +5,6 @@ from app.models.task import Task
 from app.models.approval import ApprovalHistory, ApprovalRequest
 from app.models.document import Document
 from app.models.audit_log import AuditLog
+from app.models.organization import Organization
+from app.models.subscription import Subscription
+from app.models.notification import Notification

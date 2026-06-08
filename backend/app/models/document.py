@@ -12,10 +12,12 @@ class Document(Base):
     original_name: Mapped[str] = mapped_column(String(255), nullable=False)
     stored_name: Mapped[str] = mapped_column(String(255), nullable=False)
     file_path: Mapped[str] = mapped_column(String(255), nullable=False)
+    file_size: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     version: Mapped[int] = mapped_column(Integer, default=1)
-    uploaded_by: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False)
-    task_id: Mapped[int] = mapped_column(Integer, ForeignKey("tasks.id"), nullable=True)
-    approval_request_id: Mapped[int] = mapped_column(Integer, ForeignKey("approval_requests.id"), nullable=True)
+    uploaded_by: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    organization_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("organizations.id"), nullable=True, index=True,)
+    task_id: Mapped[int] = mapped_column(Integer, ForeignKey("tasks.id"), nullable=True, index=True)
+    approval_request_id: Mapped[int] = mapped_column(Integer, ForeignKey("approval_requests.id"), nullable=True, index=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=lambda: datetime.now(timezone.utc),

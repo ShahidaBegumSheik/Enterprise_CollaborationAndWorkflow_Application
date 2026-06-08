@@ -6,7 +6,13 @@ export async function createApprovalRequest(payload) {
 }
 
 export async function getApprovals(params = {}) {
-    const { data } = await api.get("/approvals", { params });
+    const { data } = await api.get("/approvals", { 
+        params: {
+            page: params.page || 1,
+            size: params.size || 10,
+        },
+    });
+
     return data;
 }
 
