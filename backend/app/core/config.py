@@ -4,17 +4,14 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    app_name: str = Field(default="Mini Enterprise Collaboration Flow", alias="APP_NAME")
+    app_name: str = Field(default="Mini Enterprise Collaboration and Workflow Tool", alias="APP_NAME")
     api_v1_prefix: str = Field(default="/api/v1", alias="API_V1_PREFIX")
 
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
-    database_url: str = Field(
-        default="mysql+pymysql://root:root@127.0.0.1:3306/ec",
-        alias="DATABASE_URL",
-    )
+    database_url: str = Field(..., alias="DATABASE_URL",)
 
-    jwt_secret: str = Field(default="change_me", alias="JWT_SECRET_KEY")
+    jwt_secret: str = Field(..., alias="JWT_SECRET_KEY")
     jwt_algorithm: str = Field(default="HS256", alias="JWT_ALGORITHM")
     access_token_expire_minutes: int = Field(default=60, alias="ACCESS_TOKEN_EXPIRE_MINUTES")
     refresh_token_expire_minutes: int = Field(default=60*24*7, alias="REFRESH_TOKEN_EXPIRE_MINUTES")
@@ -34,9 +31,9 @@ class Settings(BaseSettings):
     rate_limit_login: str = Field(default="5/minute", alias="RATE_LIMIT_LOGIN")
     rate_limit_ticket_create: str = Field(default="10/hour", alias="RATE_LIMIT_TICKET_CREATE")
 
-    razorpay_key_id: str = Field(default="", alias="RAZORPAY_KEY_ID")
-    razorpay_key_secret: str = Field(default="", alias="RAZORPAY_KEY_SECRET")
-    razorpay_webhook_secret: str = Field(default="", alias="RAZORPAY_WEBHOOK_SECRET")
+    razorpay_key_id: str = Field(default=None, alias="RAZORPAY_KEY_ID")
+    razorpay_key_secret: str = Field(default=None, alias="RAZORPAY_KEY_SECRET")
+    razorpay_webhook_secret: str = Field(default=None, alias="RAZORPAY_WEBHOOK_SECRET")
     razorpay_pro_amount: int = Field(default=499, alias="RAZORPAY_PRO_AMOUNT")
     razorpay_currency: str = Field(default="INR", alias="RAZORPAY_CURRENCY")
     razorpay_company_name: str = Field(
